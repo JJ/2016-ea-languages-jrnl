@@ -8,7 +8,7 @@ iterations = 100000
 
 -- The bitflip function
 bitflip :: Seq Bool -> Int -> Seq Bool
-bitflip v n = update n (not (index v n)) v
+bitflip v n = adjust not n v
 
 
 -- The benchmark
@@ -20,7 +20,7 @@ benchmark n = do
   let vector = fromList $ take n rbools
 
   -- Timing
-  start <- getCurrentTime
+  start <- (vector `deepseq` getCurrentTime)
 
   -- Random bitflips
   let rflips = take iterations $ randomRs (0,n-1) gen :: [Int]

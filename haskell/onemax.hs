@@ -1,5 +1,6 @@
 import Data.Sequence hiding (take)
 import Data.Time
+import Data.Functor
 import Data.Foldable hiding (concat)
 import Control.Applicative
 import Control.DeepSeq
@@ -9,7 +10,7 @@ import System.Random
 iterations = 100000
 
 onemax :: Seq Bool -> Int
-onemax v = Data.Foldable.foldl (\y -> (\x -> if x then y+1 else y)) 0 v
+onemax v = Data.Foldable.sum $ fmap fromEnum v
 
 benchmark :: Int -> IO ()
 benchmark n = do
@@ -19,10 +20,10 @@ benchmark n = do
   let vector = fromList $ take n rbools
 
   -- Timing
-  start <- getCurrentTime
+  start <- (vector `deepseq` getCurrentTime)
 
   -- Counting
-  let count = onemax vector
+  let count = Prelude.sum $ map (\x -> onemax vector) [1..iterations]
 
   stop <- (count `deepseq` getCurrentTime)
   let diffTime = diffUTCTime stop start

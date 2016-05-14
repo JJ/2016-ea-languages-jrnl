@@ -27,7 +27,7 @@ benchmark n = do
     let vector2 = fromList $ take n rbools2
 
     -- Timing
-    start <- getCurrentTime
+    start <- ((vector1,vector2) `deepseq` getCurrentTime)
 
     -- Random crossings
     gen1 <- newStdGen
