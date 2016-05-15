@@ -14,12 +14,18 @@
 \usepackage{subfigure}
 
 \begin{document}
+\SweaveOpts{concordance=TRUE}
 %\SweaveOpts{concordance=TRUE}
 
-<<setup, cache=FALSE,echo=FALSE>>=
-library("ggplot2")
-library("ggthemes")
-library(RColorBrewer)
+<<setup, cache=FALSE, results=hide, echo=FALSE>>=
+pkgs = c("ggplot2", "ggthemes", "RColorBrewer")
+to.install <- pkgs[ ! pkgs %in% installed.packages() ]
+
+if ( length(to.install) > 0 )
+  install.packages( to.install, dependencies = TRUE, repos="http://cran.rstudio.com/")
+
+sapply(pkgs, require, character.only=TRUE)
+
 measures.bf <- read.csv('data/measures-bitflip.csv')
 measures.xo <- read.csv('data/measures-xover.csv')
 measures.mo <- read.csv('data/measures-maxones.csv')
@@ -273,6 +279,7 @@ implementations is shown in Table \ref{tab:files}.
       Free Pascal & 2.6.2-8 & \url{https://git.io/fpeo} & Bit Vector & Compiled \\
       Kotlin & 1.0.1 & \url{https://git.io/kEO} & Bit Vector &  Compiled \\
       Dart & 1.15.0 & \url{https://git.io/dEO} & List & Interpreted \\ 
+      R & Actualizar esto & Actualizar esto & Bit Vector & Interpreted \\
           % there are 23 languages in this table - Pedro
       %Corrected the language counting stuff :-) - JJ
       \hline
